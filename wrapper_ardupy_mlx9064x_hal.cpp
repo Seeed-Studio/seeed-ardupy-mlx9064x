@@ -48,19 +48,24 @@ typedef struct _mlx90641_obj_t
     paramsMLX90641 MLX90641;
 } mlx90641_obj_t;
 
-mlx90641_obj_t mlx9064x;
-
+#define  mlx9064x     (*(mlx90641_obj_t  *)self->module)
+void *operator new(size_t, void *);
 extern "C"{
     void common_hal_mlx9064x_construct(abstract_module_t * self){
         Wire.begin();
         Wire.setClock(400000); //Increase I2C clock speed to 400kHz
+        self->module = new(m_new_obj(mlx90641_obj_t)) mlx90641_obj_t();
         uint16_t eeMLX90641[832];
         MLX90641_DumpEE(mlx9064x.MLX90641_address, eeMLX90641);
         MLX90641_ExtractParameters(eeMLX90641, &(mlx9064x.MLX90641));
     }
     void common_hal_mlx9064x_deinit(abstract_module_t * self){
         Wire.end();
+        m_free(self->module);
     }
+    void common_hal_mlx9064x_set_refresh_rate(abstract_module_t * self , uint8_t rate){
+        MLX90641_SetRefreshRate(mlx9064x.MLX90641_address,rate);
+    }   
     void common_hal_mlx9064x_get_frame_data(abstract_module_t * self , float * result){
         uint16_t MLX90641Frame[242];
         for (byte x = 0 ; x < 2 ; x++) {

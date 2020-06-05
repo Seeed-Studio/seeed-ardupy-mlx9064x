@@ -34,6 +34,7 @@
 void common_hal_mlx9064x_construct(abstract_module_t * self);
 void common_hal_mlx9064x_get_frame_data(abstract_module_t * self , float * result);
 void common_hal_mlx9064x_deinit(abstract_module_t * self);
+void common_hal_mlx9064x_set_refresh_rate(abstract_module_t * self , uint8_t rate);
 
 extern const mp_obj_type_t grove_mlx9064x_type;
 
@@ -54,15 +55,33 @@ mp_obj_t  mlx9064x_get_frame_data(mp_obj_t self_in){
     {
         ret_val[i] = mp_obj_new_float(MLX90641To[i]);
     }
-    mp_obj_t ret = mp_obj_new_tuple(MLX9064xSize, ret_val);
+    mp_obj_t ret = mp_obj_new_list(MLX9064xSize, ret_val);
     m_free(ret_val);
     return ret;
 }
 MP_DEFINE_CONST_FUN_OBJ_1(mlx9064x_get_frame_data_obj, mlx9064x_get_frame_data);
 
-mp_obj_t  mlx9064x_obj_attr(mp_obj_t self_in, qstr attr, mp_obj_t *dest){
-    abstract_module_t * self = (abstract_module_t *)self_in;  
-}   
+mp_obj_t  mlx9064x_set_refresh_rate(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args){
+    abstract_module_t *self = (abstract_module_t *)pos_args[0];
+    uint8_t SampleRate = mp_obj_get_int(pos_args[1]);
+    common_hal_mlx9064x_set_refresh_rate(self,SampleRate);
+}
+STATIC MP_DEFINE_CONST_FUN_OBJ_KW(mlx9064x_set_refresh_rate_obj,1,mlx9064x_set_refresh_rate);
+
+const mp_rom_map_elem_t mlx9064x_rate_locals_dict_table[] = {
+    {MP_ROM_QSTR(MP_QSTR_HZ0_5), MP_ROM_INT(0x00)},
+    {MP_ROM_QSTR(MP_QSTR_HZ1), MP_ROM_INT(0X01)},
+    {MP_ROM_QSTR(MP_QSTR_HZ2), MP_ROM_INT(0X02)},
+    {MP_ROM_QSTR(MP_QSTR_HZ4), MP_ROM_INT(0X03)},
+    {MP_ROM_QSTR(MP_QSTR_HZ8), MP_ROM_INT(0X04)},
+};
+MP_DEFINE_CONST_DICT(mlx9064x_rate_locals_dict, mlx9064x_rate_locals_dict_table);
+
+static const mp_obj_type_t mlx9064x_rate_type = {
+    {&mp_type_type},
+    .name = MP_QSTR_rate,
+    .locals_dict = (mp_obj_t)&mlx9064x_rate_locals_dict,
+};
 
 const mp_rom_map_elem_t mlx9064x_locals_dict_table[] = {
     // instance methods
@@ -70,6 +89,8 @@ const mp_rom_map_elem_t mlx9064x_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR___enter__), MP_ROM_PTR(&default___enter___obj) },
     { MP_ROM_QSTR(MP_QSTR___exit__),  MP_ROM_PTR(&mlx9064x_obj___exit___obj) },
     { MP_ROM_QSTR(MP_QSTR_get_frame_data),  MP_ROM_PTR(&mlx9064x_get_frame_data_obj) },
+    { MP_ROM_QSTR(MP_QSTR_set_refresh_rate),  MP_ROM_PTR(&mlx9064x_set_refresh_rate_obj) },
+    { MP_ROM_QSTR(MP_QSTR_rate), MP_ROM_PTR(&mlx9064x_rate_type) },
 };
 
 MP_DEFINE_CONST_DICT(mlx9064x_locals_dict, mlx9064x_locals_dict_table);
@@ -79,5 +100,4 @@ const mp_obj_type_t grove_mlx9064x_type = {
     .name = MP_QSTR_grove_mlx9064x,
     .make_new = mlx9064x_make_new,
     .locals_dict = (mp_obj_t)&mlx9064x_locals_dict,
-    .attr = &mlx9064x_obj_attr,
 };
