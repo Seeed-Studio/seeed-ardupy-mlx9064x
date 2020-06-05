@@ -1,0 +1,12 @@
+{
+    "name": "Seeed ArduPy MLX9064x ",
+    "version": "1.0.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Seeed-Studio/seeed-ardupy-MLX9064x.git"
+    },
+    "dependencies": [{
+        "name": "Seeed_Arduino_MLX9064x",
+        "url": "https://github.com/Seeed-Studio/Seeed_Arduino_MLX9064x.git"
+    }]
+}
