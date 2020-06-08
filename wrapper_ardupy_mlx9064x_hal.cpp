@@ -53,7 +53,7 @@ void *operator new(size_t, void *);
 extern "C"{
     void common_hal_mlx9064x_construct(abstract_module_t * self){
         Wire.begin();
-        Wire.setClock(400000); //Increase I2C clock speed to 400kHz
+        Wire.setClock(2000000); //Increase I2C clock speed to 2M
         self->module = new(m_new_obj(mlx90641_obj_t)) mlx90641_obj_t();
         uint16_t eeMLX90641[832];
         MLX90641_DumpEE(mlx9064x.MLX90641_address, eeMLX90641);

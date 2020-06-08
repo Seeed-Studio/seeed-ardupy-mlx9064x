@@ -226,6 +226,9 @@ const mp_rom_map_elem_t mlx9064x_rate_locals_dict_table[] = {
     {MP_ROM_QSTR(MP_QSTR__2HZ), MP_ROM_INT(0X02)},
     {MP_ROM_QSTR(MP_QSTR__4HZ), MP_ROM_INT(0X03)},
     {MP_ROM_QSTR(MP_QSTR__8HZ), MP_ROM_INT(0X04)},
+    {MP_ROM_QSTR(MP_QSTR__16HZ), MP_ROM_INT(0X05)},
+    {MP_ROM_QSTR(MP_QSTR__32HZ), MP_ROM_INT(0X06)},
+    {MP_ROM_QSTR(MP_QSTR__64HZ), MP_ROM_INT(0X07)},
 };
 MP_DEFINE_CONST_DICT(mlx9064x_rate_locals_dict, mlx9064x_rate_locals_dict_table);
 
