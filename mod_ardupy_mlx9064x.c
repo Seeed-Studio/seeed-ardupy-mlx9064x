@@ -97,20 +97,10 @@ void interpolate_image(float *src, uint8_t src_rows, uint8_t src_cols,
         {
             float x = x_idx * mu_x;
             float y = y_idx * mu_y;
-            //  Serial.print("("); Serial.print(y_idx); Serial.print(", "); Serial.print(x_idx); Serial.print(") = ");
-            //  Serial.print("("); Serial.print(y); Serial.print(", "); Serial.print(x); Serial.print(") = ");
             get_adjacents_2d(src, adj_2d, src_rows, src_cols, x, y);
-
-            //  Serial.print("[");
-            //  for (uint8_t i=0; i<16; i++) {
-            //    Serial.print(adj_2d[i]); Serial.print(", ");
-            //  }
-            //  Serial.println("]");
-
             float frac_x = x - (int)x; // we only need the ~delta~ between the points
             float frac_y = y - (int)y; // we only need the ~delta~ between the points
             float out = bicubicInterpolate(adj_2d, frac_x, frac_y);
-            //  Serial.print("\tInterp: "); Serial.println(out);
             set_point(dest, dest_rows, dest_cols, x_idx, y_idx, out);
         }
     }
@@ -120,14 +110,6 @@ void interpolate_image(float *src, uint8_t src_rows, uint8_t src_cols,
 float cubicInterpolate(float p[], float x)
 {
     float r = p[1] + (0.5 * x * (p[2] - p[0] + x * (2.0 * p[0] - 5.0 * p[1] + 4.0 * p[2] - p[3] + x * (3.0 * (p[1] - p[2]) + p[3] - p[0]))));
-
-    // Serial.print("interpolating: [");
-    // Serial.print(p[0],2); Serial.print(", ");
-    // Serial.print(p[1],2); Serial.print(", ");
-    // Serial.print(p[2],2); Serial.print(", ");
-    // Serial.print(p[3],2); Serial.print("] w/"); Serial.print(x); Serial.print(" = ");
-    // Serial.println(r);
-
     return r;
 }
 
@@ -145,7 +127,6 @@ float bicubicInterpolate(float p[], float x, float y)
 // src is rows*cols and dest is a 4-point array passed in already allocated!
 void get_adjacents_1d(float *src, float *dest, uint8_t rows, uint8_t cols, int8_t x, int8_t y)
 {
-    // Serial.print("("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.println(")");
     // pick two items to the left
     dest[0] = get_point(src, rows, cols, x - 1, y);
     dest[1] = get_point(src, rows, cols, x, y);
@@ -157,7 +138,6 @@ void get_adjacents_1d(float *src, float *dest, uint8_t rows, uint8_t cols, int8_
 // src is rows*cols and dest is a 16-point array passed in already allocated!
 void get_adjacents_2d(float *src, float *dest, uint8_t rows, uint8_t cols, int8_t x, int8_t y)
 {
-    // Serial.print("("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.println(")");
     float arr[4];
     for (int8_t delta_y = -1; delta_y < 3; delta_y++)
     {                                          // -1, 0, 1, 2
